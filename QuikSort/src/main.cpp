@@ -21,5 +21,12 @@ int main()
 	std::cout << std::endl;
 
 	quik_sort(vec);
+	std::cout << "After QuikSort : \n";
+	for (auto &v : vec)
+	{
+		std::cout << v << " ";
+	}
+	std::cout << std::endl;
+
 	return 0;
 }
