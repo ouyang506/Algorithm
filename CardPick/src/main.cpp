@@ -9,7 +9,7 @@ extern void card_pick(int totalNum, int pickNum, std::vector<std::vector<bool>> 
 int main()
 {
 
-	std::vector<std::vector<bool> > ret;
+	std::vector<std::vector<bool>> ret;
 	card_pick(6, 3, ret);
 
 	for (auto &v : ret)
