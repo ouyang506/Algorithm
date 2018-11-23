@@ -5,20 +5,30 @@
 //这里返回的是前缀与后缀的最大匹配长度
 std::vector<int> kmpMakeNext(const std::string& pattern)
 {
-	std::vector<int> nextVec{ pattern.length(), 0};
+	std::vector<int> nextVec( (int)pattern.length(), 0 );
 	nextVec[0] = -1;
-	int curNext = nextVec[0];
+	nextVec[1] = 0;
+	int preValue = 0;
 
-	for (int i = 1; i < pattern.length(); ++i)
+	for (int i = 2; i < (int)pattern.length(); ++i)
 	{
-		if (i == 1)
+		if (pattern.at(preValue) == pattern.at(i - 1))
 		{
-			++curNext;
+			nextVec[i] = (++preValue);
 		}
-
-
-
+		else
+		{
+			nextVec[i] = nextVec[i - 1];
+			preValue = nextVec[i];
+		}
 	}
+
+	std::cout << "print next value : \n";
+	for (auto& v : nextVec)
+	{
+		std::cout << v << " ";
+	}
+	std::cout << std::endl;
 
 	return nextVec;
 }
@@ -30,6 +40,38 @@ std::vector<int> kmp(const std::string& src, const std::string& pattern)
 	if (src.empty() || pattern.empty() || src.size() < pattern.size())
 	{
 		return ret;
+	}
+
+	auto nextVec = kmpMakeNext(pattern);
+	int patternLen = (int)pattern.length();
+	int i = 0;
+	int j = 0;
+
+	while (i < (int)src.length())
+	{
+		if (src.at(i) == pattern[j])
+		{
+			++i;
+			++j;
+			if (j == patternLen)
+			{
+				std::cout << "Pattern At "  << i << std::endl;
+				break;
+			}
+		}
+		else
+		{
+			++i;
+			int nextVal = nextVec[j];
+			if (nextVal > 0)
+			{
+				j = nextVal;
+			}
+			else
+			{
+				j = 0;
+			}
+		}
 	}
 
 	return ret;
