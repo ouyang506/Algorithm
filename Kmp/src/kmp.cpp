@@ -3,28 +3,26 @@
 
 //pattern和自己比较预处理，确定不匹配时已经匹配的串可以向右移动的距离
 //这里返回的是前缀与后缀的最大匹配长度
-std::vector<int> kmpMakeNext(const std::string& pattern)
+std::vector<int> kmpMakeNext(const std::string &pattern)
 {
-	std::vector<int> nextVec( (int)pattern.length(), 0 );
+	std::vector<int> nextVec((int)pattern.length() + 1, 0);
 	nextVec[0] = -1;
 	nextVec[1] = 0;
-	int preValue = 0;
 
-	for (int i = 2; i < (int)pattern.length(); ++i)
+	for (int i = 2; i <= (int)pattern.length(); ++i)
 	{
-		if (pattern.at(preValue) == pattern.at(i - 1))
+		for (auto j = i - 1; j >= 1; --j)
 		{
-			nextVec[i] = (++preValue);
-		}
-		else
-		{
-			nextVec[i] = nextVec[i - 1];
-			preValue = nextVec[i];
+			if (pattern.at(nextVec[j]) == pattern.at(i - 1))
+			{
+				nextVec[i] = nextVec[j] + 1;
+				break;
+			}
 		}
 	}
 
 	std::cout << "print next value : \n";
-	for (auto& v : nextVec)
+	for (auto &v : nextVec)
 	{
 		std::cout << v << " ";
 	}
@@ -33,9 +31,8 @@ std::vector<int> kmpMakeNext(const std::string& pattern)
 	return nextVec;
 }
 
-std::vector<int> kmp(const std::string& src, const std::string& pattern)
+std::vector<int> kmp(const std::string &src, const std::string &pattern)
 {
-
 	std::vector<int> ret;
 	if (src.empty() || pattern.empty() || src.size() < pattern.size())
 	{
@@ -55,8 +52,9 @@ std::vector<int> kmp(const std::string& src, const std::string& pattern)
 			++j;
 			if (j == patternLen)
 			{
-				std::cout << "Pattern At "  << i << std::endl;
-				break;
+				//match all pattern
+				ret.push_back(i - patternLen);
+				j = nextVec[j];
 			}
 		}
 		else
